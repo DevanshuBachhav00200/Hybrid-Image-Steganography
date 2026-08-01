@@ -12,6 +12,7 @@ This repository contains a modular FastAPI backend and a Next.js 15 App Router f
 Hybrid-Image-Steganography/
 ├── backend/                  # FastAPI Python backend application
 │   ├── app/
+│   │   ├── main.py           # Primary FastAPI application entrypoint
 │   │   ├── algorithms/       # Steganography & Crypto algorithm placeholders
 │   │   │   ├── aes/          # AES-256 encryption engine stub
 │   │   │   ├── binary/       # Binary payload conversion utilities stub
@@ -28,7 +29,7 @@ Hybrid-Image-Steganography/
 │   │   ├── services/         # Steganography pipeline service logic
 │   │   └── utils/            # Image processing helper functions
 │   ├── tests/                # Pytest unit & endpoint tests
-│   ├── main.py               # FastAPI application entry point
+│   ├── main.py               # Root runner delegating to app.main:app
 │   ├── pyproject.toml        # Python project metadata
 │   └── requirements.txt      # Python dependencies
 │
@@ -38,11 +39,12 @@ Hybrid-Image-Steganography/
 │   │   │   ├── page.tsx          # Home page
 │   │   │   ├── encode/page.tsx   # Encode payload placeholder page
 │   │   │   ├── decode/page.tsx   # Decode stego image placeholder page
-│   │   │   ├── compare/page.tsx  # Image comparison placeholder page
+│   │   │   ├── compare/page.tsx  # Image comparison & metrics page
 │   │   │   ├── dashboard/page.tsx# Dashboard & telemetry page
 │   │   │   ├── about/page.tsx    # Project overview page
 │   │   │   └── documentation/page.tsx # API docs & specs page
-│   │   └── components/       # Reusable React components (Navbar, Footer, Cards)
+│   │   ├── components/       # Reusable UI components (Navbar, Footer, MetricsCard, AlgorithmsCard)
+│   │   └── lib/              # Shared Axios API client (api.ts)
 │   ├── package.json          # Node.js dependencies & scripts
 │   ├── tsconfig.json         # TypeScript configuration
 │   └── tailwind.config.js    # Tailwind CSS configuration
@@ -91,9 +93,9 @@ Set up local environment file:
 cp .env.example .env
 ```
 
-Start the FastAPI development server:
+Start the FastAPI development server using `app.main:app`:
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 - **API Base URL**: `http://localhost:8000/api`

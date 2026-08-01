@@ -1,18 +1,19 @@
 import { PlaceholderCard } from "@/components/PlaceholderCard";
-import { GitCompare, Eye, Activity, Image as ImageIcon } from "lucide-react";
+import { MetricsCard } from "@/components/MetricsCard";
+import { GitCompare, Eye, Image as ImageIcon } from "lucide-react";
 
 export default function ComparePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-100">Image Comparison & Fidelity Metrics</h1>
+        <h1 className="text-3xl font-bold text-gray-100">Image Comparison & Quality Metrics</h1>
         <p className="text-sm text-gray-400 mt-1">
           Perform side-by-side visual analysis and compute quantitative steganographic quality metrics (PSNR, SSIM, MSE).
         </p>
       </div>
 
       <PlaceholderCard
-        title="Visual Comparison & Metrics Interface"
+        title="Visual Comparison Interface"
         description="Upload an original cover image and an encoded stego image to generate difference heatmaps and measure degradation metrics."
         endpoint="/api/compare"
         httpMethod="POST"
@@ -24,7 +25,7 @@ export default function ComparePage() {
               <ImageIcon className="w-6 h-6 text-blue-400 mx-auto" />
               <p className="text-xs font-semibold text-gray-300">Original Cover Image</p>
               <div className="h-28 rounded-lg bg-gray-950 flex items-center justify-center text-xs text-gray-600 border border-gray-800">
-                Image Preview Placeholder
+                Cover Image Preview
               </div>
             </div>
 
@@ -32,27 +33,17 @@ export default function ComparePage() {
               <Eye className="w-6 h-6 text-emerald-400 mx-auto" />
               <p className="text-xs font-semibold text-gray-300">Stego Output Image</p>
               <div className="h-28 rounded-lg bg-gray-950 flex items-center justify-center text-xs text-gray-600 border border-gray-800">
-                Image Preview Placeholder
+                Stego Image Preview
               </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="p-3 rounded-xl bg-gray-900/80 border border-gray-800 space-y-1">
-              <span className="text-xs text-gray-400 font-mono">PSNR (dB)</span>
-              <p className="text-lg font-bold text-emerald-400 font-mono">--.- dB</p>
-            </div>
-            <div className="p-3 rounded-xl bg-gray-900/80 border border-gray-800 space-y-1">
-              <span className="text-xs text-gray-400 font-mono">SSIM</span>
-              <p className="text-lg font-bold text-blue-400 font-mono">0.----</p>
-            </div>
-            <div className="p-3 rounded-xl bg-gray-900/80 border border-gray-800 space-y-1">
-              <span className="text-xs text-gray-400 font-mono">MSE</span>
-              <p className="text-lg font-bold text-purple-400 font-mono">-.----</p>
             </div>
           </div>
         </div>
       </PlaceholderCard>
+
+      <MetricsCard
+        title="Image Distortion Metrics Evaluation"
+        subtitle="Computed via POST /api/metrics for quantitative degradation comparison"
+      />
     </div>
   );
 }

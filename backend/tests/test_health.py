@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 # Ensure root backend dir is in sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from main import app
+from app.main import app
 
 client = TestClient(app)
 

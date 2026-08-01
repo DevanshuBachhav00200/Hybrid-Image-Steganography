@@ -1,123 +1,186 @@
 # Hybrid Image Steganography System
 
-> **Enterprise-Grade Final Year Engineering Project**
-> Title: *Hybrid Image Steganography System Using Morse Code Encoding and Multi-Domain Data Embedding Techniques*
+A robust, multi-layered steganography and encryption platform integrating spatial domain (LSB), frequency domain (DCT, DWT), payload encoding (Morse Code), and standard cryptography (AES-256).
+
+This repository contains a modular FastAPI backend and a Next.js 15 App Router frontend designed for independent or containerized execution.
 
 ---
 
-## 📌 Architectural Overview
-
-This system provides an end-to-end framework for multi-domain data hiding in cover images, combining pre-encoding techniques with spatial (LSB) and frequency domain (DCT, DWT) steganographic embedding.
-
-```
-                  ┌─────────────────────────────────────────┐
-                  │               User Input                │
-                  └────────────────────┬────────────────────┘
-                                       │
-                         ┌─────────────▼─────────────┐
-                         │   Morse Code Pre-Encoding │
-                         └─────────────┬─────────────┘
-                                       │
-                         ┌─────────────▼─────────────┐
-                         │    AES-256 Encryption     │
-                         └─────────────┬─────────────┘
-                                       │
-            ┌──────────────────────────┴──────────────────────────┐
-            │                                                     │
-┌───────────▼───────────┐                             ┌───────────▼───────────┐
-│ Spatial Domain (LSB)  │                             │ Frequency Domain      │
-└───────────────────────┘                             │   (DCT / DWT)         │
-                                                      └───────────────────────┘
-```
-
----
-
-## 🛠 Tech Stack
-
-### Frontend
-- **Framework**: Next.js 15 (App Router)
-- **UI Library**: React 19, TailwindCSS, Lucide Icons, ShadCN UI Design Tokens
-- **State & Routing**: TypeScript, React Hook Form, Axios
-- **Data Visualization**: Recharts
-- **Animations**: Framer Motion
-
-### Backend
-- **Framework**: Python 3.12, FastAPI, Pydantic v2
-- **Image Processing**: OpenCV (`opencv-python`), PyWavelets (`PyWavelets`), Scikit-Image (`scikit-image`), Pillow (`PIL`)
-- **Cryptography & Math**: PyCryptodome, NumPy
-
----
-
-## 📂 Enterprise Folder Architecture
+## System Architecture Overview
 
 ```
 Hybrid-Image-Steganography/
-├── backend/
+├── backend/                  # FastAPI Python backend application
 │   ├── app/
-│   │   ├── api/             # FastAPI Endpoint Routers
-│   │   ├── core/            # App Logging & Base Exceptions
-│   │   ├── config/          # Pydantic Settings & Config
-│   │   ├── services/        # Orchestration Service Interfaces
-│   │   ├── algorithms/      # Modular Domain Algorithms Stubs
-│   │   │   ├── morse/
-│   │   │   ├── aes/
-│   │   │   ├── binary/
-│   │   │   ├── lsb/
-│   │   │   ├── dct/
-│   │   │   └── dwt/
-│   │   ├── metrics/         # PSNR, SSIM, MSE Evaluators
-│   │   ├── models/          # Domain Data Models
-│   │   ├── schemas/         # Request & Response Pydantic Models
-│   │   └── utils/           # Image Processing Helpers
-│   ├── tests/               # Test Suite
-│   ├── main.py              # Application Entrypoint
-│   └── requirements.txt
-├── frontend/
-│   ├── app/                 # Next.js App Router (Pages & Layouts)
-│   ├── components/          # Reusable UI & Layout Components
-│   ├── features/            # Domain Feature Modules
-│   ├── hooks/               # Custom React Hooks
-│   ├── services/            # Axios API Client & Services
-│   ├── styles/              # Global CSS & Design System
-│   ├── types/               # TypeScript Definitions
-│   ├── utils/               # Helper Functions
-│   └── package.json
-├── docker-compose.yml
-├── Dockerfile.backend
-└── Dockerfile.frontend
+│   │   ├── algorithms/       # Steganography & Crypto algorithm placeholders
+│   │   │   ├── aes/          # AES-256 encryption engine stub
+│   │   │   ├── binary/       # Binary payload conversion utilities stub
+│   │   │   ├── dct/          # Discrete Cosine Transform stego stub
+│   │   │   ├── dwt/          # Discrete Wavelet Transform stego stub
+│   │   │   ├── lsb/          # Least Significant Bit spatial stego stub
+│   │   │   └── morse/        # Morse code encoding/decoding stub
+│   │   ├── api/              # FastAPI router & endpoint handlers
+│   │   ├── config/           # Pydantic environment configuration
+│   │   ├── core/             # Custom exception handlers & logging
+│   │   ├── metrics/          # PSNR, SSIM, MSE metrics evaluator
+│   │   ├── models/           # Domain data models
+│   │   ├── schemas/          # API request & response schemas
+│   │   ├── services/         # Steganography pipeline service logic
+│   │   └── utils/            # Image processing helper functions
+│   ├── tests/                # Pytest unit & endpoint tests
+│   ├── main.py               # FastAPI application entry point
+│   ├── pyproject.toml        # Python project metadata
+│   └── requirements.txt      # Python dependencies
+│
+├── frontend/                 # Next.js 15 App Router frontend application
+│   ├── src/
+│   │   ├── app/              # Next.js pages & layout
+│   │   │   ├── page.tsx          # Home page
+│   │   │   ├── encode/page.tsx   # Encode payload placeholder page
+│   │   │   ├── decode/page.tsx   # Decode stego image placeholder page
+│   │   │   ├── compare/page.tsx  # Image comparison placeholder page
+│   │   │   ├── dashboard/page.tsx# Dashboard & telemetry page
+│   │   │   ├── about/page.tsx    # Project overview page
+│   │   │   └── documentation/page.tsx # API docs & specs page
+│   │   └── components/       # Reusable React components (Navbar, Footer, Cards)
+│   ├── package.json          # Node.js dependencies & scripts
+│   ├── tsconfig.json         # TypeScript configuration
+│   └── tailwind.config.js    # Tailwind CSS configuration
+│
+├── Dockerfile.backend        # Docker build instructions for backend
+├── Dockerfile.frontend       # Docker build instructions for frontend
+└── docker-compose.yml        # Multi-container orchestration
 ```
 
 ---
 
-## 🚀 Quick Start Guide
+## Local Development Instructions
 
 ### Prerequisites
-- Node.js 20+
-- Python 3.12+
-- Docker & Docker Compose (Optional)
+- **Python**: Version 3.12 or higher
+- **Node.js**: Version 20 or higher (with `npm`)
+- **Docker & Docker Compose**: (Optional, for containerized run)
 
-### Running with Docker Compose
+---
+
+### 1. Running the Backend Independently
+
+Navigate to the `backend` directory:
+```bash
+cd backend
+```
+
+Create and activate a Python virtual environment:
+```bash
+# Windows (PowerShell)
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# Linux / macOS
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install backend dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Set up local environment file:
+```bash
+cp .env.example .env
+```
+
+Start the FastAPI development server:
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+- **API Base URL**: `http://localhost:8000/api`
+- **Interactive Swagger Docs**: `http://localhost:8000/api/docs`
+- **ReDoc Specifications**: `http://localhost:8000/api/redoc`
+
+Run backend tests:
+```bash
+pytest tests/
+```
+
+---
+
+### 2. Running the Frontend Independently
+
+Navigate to the `frontend` directory:
+```bash
+cd frontend
+```
+
+Install frontend dependencies:
+```bash
+npm install
+```
+
+Set up local environment file:
+```bash
+cp .env.example .env.local
+```
+
+Start the Next.js development server:
+```bash
+npm run dev
+```
+
+- **Frontend App URL**: `http://localhost:3000`
+
+Run TypeScript type verification:
+```bash
+npm run type-check
+```
+
+---
+
+### 3. Running Containerized with Docker Compose
+
+To start both services simultaneously in isolated containers from the root directory:
+
 ```bash
 docker-compose up --build
 ```
-- **Frontend URL**: `http://localhost:3000`
-- **Backend API Docs**: `http://localhost:8000/docs`
+
+To stop containers:
+```bash
+docker-compose down
+```
 
 ---
 
-## 🧪 API Endpoints Overview
+## API Endpoints Reference
 
-| Method | Endpoint | Description | Status |
+| HTTP Method | Endpoint Path | Description | Tag |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/health` | Health Check | Placeholder |
-| `GET` | `/api/version` | API Versioning | Placeholder |
-| `GET` | `/api/algorithms` | Supported Steganography Algorithms | Placeholder |
-| `POST` | `/api/encode` | Embed Secret Message into Image | Placeholder |
-| `POST` | `/api/decode` | Extract Secret Message from Image | Placeholder |
-| `POST` | `/api/compare` | Visual & Statistical Image Comparison | Placeholder |
-| `POST` | `/api/metrics` | Calculate PSNR, SSIM, MSE Metrics | Placeholder |
+| `GET` | `/api/health` | Service health status check | Health & Version |
+| `GET` | `/api/version` | Service version information | Health & Version |
+| `GET` | `/api/algorithms` | List supported steganography algorithms | Metadata & Specs |
+| `POST` | `/api/encode` | Encode secret payload into cover image | Steganography Operations |
+| `POST` | `/api/decode` | Extract hidden payload from stego image | Steganography Operations |
+| `POST` | `/api/compare` | Compare cover vs stego image quality | Analysis & Comparison |
+| `POST` | `/api/metrics` | Compute evaluation metrics (PSNR, SSIM, MSE) | Analysis & Comparison |
 
 ---
 
-## 📜 License
-Engineering Final Year Project Scaffolding. All Rights Reserved.
+## Frontend Page Routes
+
+| Route Path | Page Description |
+| :--- | :--- |
+| `/` | **Home**: Hero section, architecture overview, module cards |
+| `/encode` | **Encode**: Image upload & payload encoding configuration interface |
+| `/decode` | **Decode**: Stego image payload extraction interface |
+| `/compare` | **Compare**: Side-by-side visual comparison & quality metrics |
+| `/dashboard` | **Dashboard**: System telemetry, server status & algorithm specs |
+| `/about` | **About**: Project research mission & multi-layer steganography concepts |
+| `/documentation` | **Documentation**: API endpoint reference & interactive OpenAPI link |
+
+---
+
+## License
+
+MIT License.

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   Shield,
   Home,
@@ -21,6 +22,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { useTheme } from "@/lib/theme-context";
 import { MobileMenu } from "./MobileMenu";
+import { buttonHoverVariants } from "@/lib/animations";
 
 export interface NavbarProps {
   className?: string;
@@ -50,11 +52,15 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
           className
         )}
       >
-        {/* Brand Logo */}
+        {/* Brand Logo with Motion Scale */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="p-2 rounded-lg bg-primary/15 border border-primary/30 text-primary group-hover:scale-105 transition-transform duration-200 shadow-glow-blue">
+          <motion.div
+            whileHover={{ scale: 1.08, rotate: 3 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-2 rounded-lg bg-primary/15 border border-primary/30 text-primary shadow-glow-blue"
+          >
             <Shield className="w-5 h-5" />
-          </div>
+          </motion.div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-text-primary flex items-center gap-2">
               STEGO<span className="text-primary font-mono font-normal">CYBER</span>
@@ -66,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
           </div>
         </Link>
 
-        {/* Desktop Nav Links */}
+        {/* Desktop Nav Links with Shared Layout Indicator */}
         <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1 bg-card/50 p-1 rounded-xl border border-border/60">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -76,12 +82,19 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 select-none",
+                  "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 select-none",
                   isActive
-                    ? "bg-primary text-white shadow-sm font-semibold"
+                    ? "text-white font-semibold"
                     : "text-text-secondary hover:text-text-primary hover:bg-card-hover"
                 )}
               >
+                {isActive && (
+                  <motion.div
+                    layoutId="active-navbar-indicator"
+                    className="absolute inset-0 bg-primary rounded-lg shadow-glow-blue -z-10"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
                 <Icon className="w-3.5 h-3.5" />
                 <span>{item.label}</span>
               </Link>
@@ -91,28 +104,31 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
 
         {/* Actions & Mobile Trigger */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={toggleTheme}
-            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            className="hidden sm:inline-flex"
-          >
-            {theme === "dark" ? <Sun className="w-4 h-4 text-warning" /> : <Moon className="w-4 h-4 text-primary" />}
-          </Button>
+          <motion.div variants={buttonHoverVariants} initial="rest" whileHover="hover" whileTap="tap">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              className="hidden sm:inline-flex"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4 text-warning" /> : <Moon className="w-4 h-4 text-primary" />}
+            </Button>
+          </motion.div>
 
           <Badge variant="success" dot size="md" glow className="hidden sm:inline-flex">
             System Ready
           </Badge>
 
           {/* Hamburger Menu Trigger for Mobile / Tablet */}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.92 }}
             onClick={() => setMobileMenuOpen(true)}
             aria-label="Open Mobile Menu"
             className="lg:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-card-hover border border-border transition-colors focus-ring"
           >
             <Menu className="w-5 h-5" />
-          </button>
+          </motion.button>
         </div>
       </header>
 

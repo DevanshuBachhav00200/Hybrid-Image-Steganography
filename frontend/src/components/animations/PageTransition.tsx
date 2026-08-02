@@ -1,20 +1,20 @@
 "use client";
 
 import React from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { pageFadeVariants } from "@/lib/animations";
 
-export interface PageTransitionProps {
+interface PageTransitionProps {
   children: React.ReactNode;
 }
 
-export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
+export function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return <div className="w-full flex-1 flex flex-col">{children}</div>;
+    return <div className="w-full">{children}</div>;
   }
 
   return (
@@ -25,10 +25,10 @@ export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="w-full flex-1 flex flex-col"
+        className="w-full flex-1"
       >
         {children}
       </motion.div>
     </AnimatePresence>
   );
-};
+}

@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
+import { cardHoverVariants } from "@/lib/animations";
 
 export interface MetricCardProps {
   title: string;
@@ -25,9 +27,13 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   className,
 }) => {
   return (
-    <div
+    <motion.div
+      variants={cardHoverVariants}
+      initial="rest"
+      whileHover="hover"
+      whileTap="tap"
       className={cn(
-        "glass-card border border-border rounded-xl p-5 space-y-3 shadow-md hover:border-border-hover transition-colors",
+        "glass-card border border-border rounded-xl p-5 space-y-3 shadow-md hover:border-border-hover transition-colors select-none",
         className
       )}
     >
@@ -58,6 +64,6 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         )}
         {subtitle && <span className="text-[11px] text-text-muted">{subtitle}</span>}
       </div>
-    </div>
+    </motion.div>
   );
 };

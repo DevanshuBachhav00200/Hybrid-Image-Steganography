@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Shield,
+  Home,
   Cpu,
   Layers,
   BarChart2,
@@ -11,33 +13,35 @@ import {
   ChevronLeft,
   ChevronRight,
   Info,
-  Settings,
-  Database,
+  Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 
 export interface SidebarProps {
-  activePath?: string;
   className?: string;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activePath = "/dashboard", className }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
+  const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
   const menuItems = [
+    { label: "Home", href: "/", icon: Home },
     { label: "Dashboard", href: "/dashboard", icon: Cpu },
     { label: "Encode Module", href: "/encode", icon: Layers, badge: "Phase 3" },
     { label: "Decode Module", href: "/decode", icon: Shield, badge: "Phase 4" },
     { label: "Analysis & Metrics", href: "/compare", icon: BarChart2, badge: "Phase 5" },
     { label: "Design System Catalog", href: "/design-system", icon: BookOpen },
-    { label: "Documentation", href: "/about", icon: Info },
+    { label: "Documentation", href: "/documentation", icon: Info },
+    { label: "About System", href: "/about", icon: Shield },
+    { label: "Contact", href: "/contact", icon: Mail },
   ];
 
   return (
     <aside
       className={cn(
-        "h-screen sticky top-0 z-30 bg-background-secondary border-r border-border flex flex-col justify-between transition-all duration-300 select-none",
+        "hidden md:flex h-screen sticky top-0 z-30 bg-background-secondary border-r border-border flex-col justify-between transition-all duration-300 select-none",
         collapsed ? "w-20" : "w-64",
         className
       )}
@@ -45,29 +49,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePath = "/dashboard", cla
       {/* Header */}
       <div className="p-4 border-b border-border/70 flex items-center justify-between">
         {!collapsed && (
-          <div className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2.5">
             <div className="p-2 rounded-lg bg-primary/15 text-primary border border-primary/30">
               <Shield className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-bold text-text-primary tracking-tight">STEGO-LAB</span>
-              <span className="text-[10px] font-mono text-text-muted">Research System</span>
+              <span className="text-[10px] font-mono text-text-muted">Research Architecture</span>
             </div>
-          </div>
+          </Link>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-card-hover border border-border transition-colors mx-auto"
+          aria-label={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+          className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-card-hover border border-border transition-colors mx-auto focus-ring"
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
       </div>
 
       {/* Nav List */}
-      <div className="p-3 space-y-1 overflow-y-auto flex-1">
+      <nav aria-label="Sidebar Navigation" className="p-3 space-y-1 overflow-y-auto flex-1">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = activePath === item.href;
+          const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
@@ -91,9 +96,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePath = "/dashboard", cla
             </Link>
           );
         })}
-      </div>
+      </nav>
 
-      {/* Footer info */}
+      {/* Footer Info */}
       {!collapsed && (
         <div className="p-4 border-t border-border/70 bg-card/40 space-y-2">
           <div className="flex items-center justify-between text-xs">

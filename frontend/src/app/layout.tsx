@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/theme-context";
 import { ToastProvider } from "@/components/feedback/Toast";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,6 +20,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Hybrid Image Steganography System | Research Architecture",
   description: "Enterprise multi-layer steganography platform integrating Morse Code, AES-256, LSB, DCT, and DWT algorithms.",
+  keywords: ["Steganography", "Morse Code", "AES-256", "LSB", "DCT", "DWT", "Cybersecurity", "Image Security"],
+  authors: [{ name: "Research Team" }],
 };
 
 export default function RootLayout({
@@ -31,7 +34,7 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen bg-background text-text-primary antialiased">
         <ThemeProvider>
           <ToastProvider>
-            {children}
+            <AppLayout>{children}</AppLayout>
           </ToastProvider>
         </ThemeProvider>
       </body>

@@ -1,49 +1,42 @@
-import { PlaceholderCard } from "@/components/PlaceholderCard";
-import { MetricsCard } from "@/components/MetricsCard";
-import { GitCompare, Eye, Image as ImageIcon } from "lucide-react";
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import { PageTemplate } from "@/components/layout/PageTemplate";
+import { ContentWrapper } from "@/components/layout/ContentWrapper";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { BarChart2, Activity, ArrowLeft } from "lucide-react";
 
 export default function ComparePage() {
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-100">Image Comparison & Quality Metrics</h1>
-        <p className="text-sm text-gray-400 mt-1">
-          Perform side-by-side visual analysis and compute quantitative steganographic quality metrics (PSNR, SSIM, MSE).
-        </p>
-      </div>
-
-      <PlaceholderCard
-        title="Visual Comparison Interface"
-        description="Upload an original cover image and an encoded stego image to generate difference heatmaps and measure degradation metrics."
-        endpoint="/api/compare"
-        httpMethod="POST"
-        icon={<GitCompare className="w-6 h-6" />}
-      >
-        <div className="space-y-6 opacity-80 pointer-events-none">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800 text-center space-y-2">
-              <ImageIcon className="w-6 h-6 text-blue-400 mx-auto" />
-              <p className="text-xs font-semibold text-gray-300">Original Cover Image</p>
-              <div className="h-28 rounded-lg bg-gray-950 flex items-center justify-center text-xs text-gray-600 border border-gray-800">
-                Cover Image Preview
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800 text-center space-y-2">
-              <Eye className="w-6 h-6 text-emerald-400 mx-auto" />
-              <p className="text-xs font-semibold text-gray-300">Stego Output Image</p>
-              <div className="h-28 rounded-lg bg-gray-950 flex items-center justify-center text-xs text-gray-600 border border-gray-800">
-                Stego Image Preview
-              </div>
-            </div>
-          </div>
+    <PageTemplate
+      title="Algorithm Comparison & Performance Metrics"
+      description="Benchmark Peak Signal-to-Noise Ratio (PSNR), Structural Similarity Index (SSIM), Mean Squared Error (MSE), and execution latency across LSB, DCT, and DWT algorithms."
+      badge={<Badge variant="accent" size="md">Phase 5 Reserved</Badge>}
+      icon={<BarChart2 className="w-8 h-8 text-primary" />}
+      heroActions={
+        <Link href="/dashboard">
+          <Button variant="outline" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+            Back to Dashboard
+          </Button>
+        </Link>
+      }
+    >
+      <ContentWrapper variant="glass" padding="lg" className="text-center space-y-4 py-12">
+        <div className="w-16 h-16 rounded-full bg-accent/10 border border-accent/30 text-accent flex items-center justify-center mx-auto shadow-glow-cyan">
+          <Activity className="w-8 h-8" />
         </div>
-      </PlaceholderCard>
-
-      <MetricsCard
-        title="Image Distortion Metrics Evaluation"
-        subtitle="Computed via POST /api/metrics for quantitative degradation comparison"
-      />
-    </div>
+        <div className="space-y-1 max-w-md mx-auto">
+          <h2 className="text-xl font-bold text-text-primary">Comparison Metrics Shell Active</h2>
+          <p className="text-xs text-text-muted">
+            This page represents the application route shell for Phase 5. Recharts analytics and algorithm benchmark comparisons will be integrated in future phases.
+          </p>
+        </div>
+        <div className="pt-2">
+          <Badge variant="muted" size="md">Route: /compare</Badge>
+        </div>
+      </ContentWrapper>
+    </PageTemplate>
   );
 }

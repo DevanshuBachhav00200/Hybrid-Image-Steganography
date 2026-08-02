@@ -1,52 +1,53 @@
-import { PlaceholderCard } from "@/components/PlaceholderCard";
-import { AlgorithmsCard } from "@/components/AlgorithmsCard";
-import { Info, Shield, Layers } from "lucide-react";
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import { PageTemplate } from "@/components/layout/PageTemplate";
+import { ContentWrapper } from "@/components/layout/ContentWrapper";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Info, Shield, Layers, ArrowLeft } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-100">About the Hybrid Steganography Project</h1>
-        <p className="text-sm text-gray-400 mt-1">
-          Overview of research objectives, system architecture, and algorithm concepts.
+    <PageTemplate
+      title="About the Steganography Project"
+      description="Hybrid Image Steganography System Using Morse Code Encoding and Multi-Domain Data Embedding Techniques."
+      badge={<Badge variant="primary" size="md">Research Architecture</Badge>}
+      icon={<Info className="w-8 h-8 text-primary" />}
+      heroActions={
+        <Link href="/">
+          <Button variant="outline" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+            Back to Home
+          </Button>
+        </Link>
+      }
+    >
+      <ContentWrapper variant="glass" padding="lg" className="space-y-4">
+        <h3 className="text-base font-bold text-text-primary">Project Mission & Objectives</h3>
+        <p className="text-xs text-text-secondary leading-relaxed">
+          The goal of this research project is to pioneer a multi-layer secure data hiding framework. By combining Morse Code modulation with AES-256 GCM encryption and multi-domain steganography (LSB, DCT, DWT), the system achieves high payload capacity, zero perceptual distortion, and strong resilience against steganalysis.
         </p>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 rounded-2xl glass-panel border border-gray-800 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
-              <Shield className="w-5 h-5" />
-            </div>
-            <h2 className="text-lg font-bold text-gray-100">Project Mission</h2>
+        <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div className="p-3 bg-background-secondary rounded-lg border border-border">
+            <span className="font-semibold text-text-primary block mb-1">Frontend Stack</span>
+            <span className="text-text-muted font-mono">Next.js 15 • React 19 • Tailwind CSS • Framer Motion</span>
           </div>
-          <p className="text-sm text-gray-300 leading-relaxed">
-            The Hybrid Image Steganography System demonstrates high-capacity, robust, and imperceptible data embedding by coupling classical cryptography (AES-256) and text obfuscation (Morse Code) with spatial and frequency domain steganographic techniques.
-          </p>
+          <div className="p-3 bg-background-secondary rounded-lg border border-border">
+            <span className="font-semibold text-text-primary block mb-1">Design System</span>
+            <span className="text-text-muted font-mono">Phase 2A Design Tokens • Dark Professional Theme</span>
+          </div>
+          <div className="p-3 bg-background-secondary rounded-lg border border-border">
+            <span className="font-semibold text-text-primary block mb-1">Application Shell</span>
+            <span className="text-text-muted font-mono">Phase 2B App Router Shell & Mobile Drawer Navigation</span>
+          </div>
         </div>
 
-        <div className="p-6 rounded-2xl glass-panel border border-gray-800 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
-              <Layers className="w-5 h-5" />
-            </div>
-            <h2 className="text-lg font-bold text-gray-100">Layered Security Design</h2>
-          </div>
-          <p className="text-sm text-gray-300 leading-relaxed">
-            By applying a multi-stage pipeline (Text &rarr; Morse &rarr; AES-256 Cipher &rarr; Binary Representation &rarr; Image Coefficients), payload security relies on both computational secrecy and statistical imperceptibility.
-          </p>
+        <div className="pt-2 text-center">
+          <Badge variant="muted" size="md">Route: /about</Badge>
         </div>
-      </div>
-
-      <AlgorithmsCard />
-
-      <PlaceholderCard
-        title="Architecture Specifications Endpoint"
-        description="Supported steganographic algorithms (LSB, DCT, DWT) and encryption layers (AES-256) are returned dynamically via the API endpoint below."
-        endpoint="/api/algorithms"
-        httpMethod="GET"
-        icon={<Info className="w-6 h-6" />}
-      />
-    </div>
+      </ContentWrapper>
+    </PageTemplate>
   );
 }

@@ -1,83 +1,64 @@
-import { PlaceholderCard } from "@/components/PlaceholderCard";
-import { BookOpen, Server, Code2, CheckCircle2 } from "lucide-react";
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import { PageTemplate } from "@/components/layout/PageTemplate";
+import { ContentWrapper } from "@/components/layout/ContentWrapper";
+import { GridContainer } from "@/components/layout/GridContainer";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { BookOpen, FileText, Code2, Shield, ArrowLeft } from "lucide-react";
 
 export default function DocumentationPage() {
-  const endpoints = [
-    { method: "GET", path: "/api/health", desc: "Backend health check status" },
-    { method: "GET", path: "/api/version", desc: "API application version metadata" },
-    { method: "GET", path: "/api/algorithms", desc: "Supported steganography algorithms spec" },
-    { method: "POST", path: "/api/encode", desc: "Encode secret payload into cover image" },
-    { method: "POST", path: "/api/decode", desc: "Extract hidden payload from stego image" },
-    { method: "POST", path: "/api/compare", desc: "Compute PSNR, SSIM, MSE metrics" },
-    { method: "POST", path: "/api/metrics", desc: "Detailed steganographic pipeline evaluation" },
-  ];
-
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-100">API Documentation</h1>
-        <p className="text-sm text-gray-400 mt-1">
-          Technical specifications for FastAPI backend endpoints and client communication.
-        </p>
-      </div>
-
-      <PlaceholderCard
-        title="Interactive Swagger & ReDoc Specifications"
-        description="When the backend server is running, native interactive documentation is served directly at the FastAPI endpoints below."
-        endpoint="/api/docs"
-        httpMethod="GET"
-        icon={<BookOpen className="w-6 h-6" />}
-      >
-        <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-300 flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <Server className="w-4 h-4 text-blue-400" />
-              FastAPI Interactive OpenAPI Docs available at:
-            </span>
-            <code className="font-mono bg-blue-950/60 px-2.5 py-1 rounded text-blue-200">
-              http://localhost:8000/api/docs
-            </code>
+    <PageTemplate
+      title="System Architecture & Documentation"
+      description="Technical documentation guide covering Morse Code modulation, AES-256 GCM encryption, and Spatial/Frequency Domain embedding algorithms."
+      badge={<Badge variant="accent" size="md">Docs v2.0</Badge>}
+      icon={<BookOpen className="w-8 h-8 text-primary" />}
+      heroActions={
+        <Link href="/design-system">
+          <Button variant="outline" size="sm" rightIcon={<Code2 className="w-4 h-4" />}>
+            Design Tokens Catalog
+          </Button>
+        </Link>
+      }
+    >
+      <GridContainer cols={3} gap="md">
+        <ContentWrapper variant="glass" padding="md" className="space-y-2">
+          <div className="p-2 rounded bg-primary/10 text-primary w-fit">
+            <FileText className="w-5 h-5" />
           </div>
+          <h3 className="text-sm font-semibold text-text-primary">1. Morse Modulation Protocol</h3>
+          <p className="text-xs text-text-muted">
+            Details on standard dot/dash symbol conversion to binary array representations.
+          </p>
+        </ContentWrapper>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-800">
-            <table className="w-full text-left text-xs sm:text-sm font-mono">
-              <thead className="bg-gray-900 text-gray-300 border-b border-gray-800">
-                <tr>
-                  <th className="p-3">HTTP Method</th>
-                  <th className="p-3">Endpoint</th>
-                  <th className="p-3">Description</th>
-                  <th className="p-3">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800 bg-gray-950/40 text-gray-400">
-                {endpoints.map((ep) => (
-                  <tr key={ep.path} className="hover:bg-gray-900/40">
-                    <td className="p-3">
-                      <span
-                        className={`px-2 py-0.5 rounded font-bold text-xs ${
-                          ep.method === "POST"
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                            : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                        }`}
-                      >
-                        {ep.method}
-                      </span>
-                    </td>
-                    <td className="p-3 font-semibold text-gray-200">{ep.path}</td>
-                    <td className="p-3 text-gray-400 font-sans text-xs">{ep.desc}</td>
-                    <td className="p-3">
-                      <span className="text-amber-400 text-xs flex items-center gap-1 font-sans">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                        Baseline Ready
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <ContentWrapper variant="glass" padding="md" className="space-y-2">
+          <div className="p-2 rounded bg-secondary/10 text-secondary w-fit">
+            <Shield className="w-5 h-5" />
           </div>
-        </div>
-      </PlaceholderCard>
-    </div>
+          <h3 className="text-sm font-semibold text-text-primary">2. AES-256 Pre-Encryption</h3>
+          <p className="text-xs text-text-muted">
+            Cryptographic key derivation and Galois/Counter Mode authenticated ciphertext generation.
+          </p>
+        </ContentWrapper>
+
+        <ContentWrapper variant="glass" padding="md" className="space-y-2">
+          <div className="p-2 rounded bg-accent/10 text-accent w-fit">
+            <Code2 className="w-5 h-5" />
+          </div>
+          <h3 className="text-sm font-semibold text-text-primary">3. Multi-Domain Algorithms</h3>
+          <p className="text-xs text-text-muted">
+            Mathematical background for LSB spatial bit replacement, DCT frequency matrices, and DWT wavelets.
+          </p>
+        </ContentWrapper>
+      </GridContainer>
+
+      <ContentWrapper variant="solid" padding="md" className="text-center">
+        <span className="text-xs text-text-muted font-mono">Route: /documentation • Built with PageTemplate</span>
+      </ContentWrapper>
+    </PageTemplate>
   );
 }

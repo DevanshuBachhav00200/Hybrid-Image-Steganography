@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ export interface MetricCardProps {
   className?: string;
 }
 
-export const MetricCard: React.FC<MetricCardProps> = ({
+export const MetricCard: React.FC<MetricCardProps> = memo(({
   title,
   value,
   unit,
@@ -66,4 +66,6 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       </div>
     </motion.div>
   );
-};
+});
+
+MetricCard.displayName = "MetricCard";

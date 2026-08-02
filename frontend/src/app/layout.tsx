@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/theme-context";
 import { ToastProvider } from "@/components/feedback/Toast";
+import { ErrorBoundary } from "@/components/feedback/ErrorBoundary";
 import { AppLayout } from "@/components/layout/AppLayout";
 
 const inter = Inter({
@@ -32,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark`}>
       <body className="flex flex-col min-h-screen bg-background text-text-primary antialiased">
-        <ThemeProvider>
-          <ToastProvider>
-            <AppLayout>{children}</AppLayout>
-          </ToastProvider>
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider>
+            <ToastProvider>
+              <AppLayout>{children}</AppLayout>
+            </ToastProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

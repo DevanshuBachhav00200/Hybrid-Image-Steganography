@@ -53,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
         )}
       >
         {/* Brand Logo with Motion Scale */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" aria-label="StegoCyber Home Page" className="flex items-center gap-3 group focus-ring rounded-lg">
           <motion.div
             whileHover={{ scale: 1.08, rotate: 3 }}
             whileTap={{ scale: 0.95 }}
@@ -81,8 +81,9 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 select-none",
+                  "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 select-none focus-ring",
                   isActive
                     ? "text-white font-semibold"
                     : "text-text-secondary hover:text-text-primary hover:bg-card-hover"
@@ -110,7 +111,8 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
               size="icon"
               onClick={toggleTheme}
               title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              className="hidden sm:inline-flex"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              className="hidden sm:inline-flex touch-target"
             >
               {theme === "dark" ? <Sun className="w-4 h-4 text-warning" /> : <Moon className="w-4 h-4 text-primary" />}
             </Button>
@@ -124,8 +126,9 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open Mobile Menu"
-            className="lg:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-card-hover border border-border transition-colors focus-ring"
+            aria-label="Open Mobile Navigation Menu"
+            aria-expanded={mobileMenuOpen}
+            className="lg:hidden p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-card-hover border border-border transition-colors focus-ring touch-target flex items-center justify-center"
           >
             <Menu className="w-5 h-5" />
           </motion.button>

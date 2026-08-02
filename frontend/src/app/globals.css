@@ -59,7 +59,7 @@
     --glow-danger: 0 0 25px -5px rgba(239, 68, 68, 0.4);
   }
 
-  /* Light Theme Overrides (Prepared for future toggle) */
+  /* Light Theme Overrides */
   .light {
     --background: #f8fafc;
     --background-secondary: #f1f5f9;
@@ -93,6 +93,12 @@
   }
 }
 
+/* Accessible Focus Ring Global Rules */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -124,8 +130,14 @@
 }
 
 .focus-ring:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Touch Target Minimum Dimensions */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 /* Glassmorphism & Cyber Effects */
@@ -163,19 +175,12 @@
   -webkit-text-fill-color: transparent;
 }
 
-.gradient-border-glow {
-  position: relative;
-}
-
-.gradient-border-glow::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(139, 92, 246, 0.5));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+/* Motion Accessibility Fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

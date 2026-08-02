@@ -4,6 +4,7 @@ import React from "react";
 import { Sidebar } from "@/components/navigation/Sidebar";
 import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/components/navigation/Footer";
+import { SkipToContent } from "@/components/navigation/SkipToContent";
 import { PageTransition } from "./PageTransition";
 import { cn } from "@/lib/utils";
 
@@ -20,10 +21,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   return (
     <div className="flex min-h-screen bg-background text-text-primary overflow-x-hidden">
+      <SkipToContent />
       {showSidebar && <Sidebar />}
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar />
-        <main className={cn("flex-1 flex flex-col w-full", className)}>
+        <main id="main-content" tabIndex={-1} className={cn("flex-1 flex flex-col w-full outline-none", className)}>
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />

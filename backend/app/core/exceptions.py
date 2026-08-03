@@ -1,17 +1,40 @@
-class StegoException(Exception):
-    """Base exception class for steganography module."""
-    def __init__(self, message: str = "Steganography operation error"):
+"""
+Custom domain exception hierarchy for Hybrid Image Steganography System.
+"""
+
+class StegoAppException(Exception):
+    """Base exception for all application-specific errors."""
+    def __init__(self, message: str, details: str = None):
+        super().__init__(message)
         self.message = message
-        super().__init__(self.message)
+        self.details = details
 
-class EncodingException(StegoException):
-    """Exception raised during encoding operation failure."""
+
+class ValidationException(StegoAppException):
+    """Raised when input validation fails."""
     pass
 
-class DecodingException(StegoException):
-    """Exception raised during decoding operation failure."""
+
+class ImageException(StegoAppException):
+    """Raised when image processing or format validation fails."""
     pass
 
-class InvalidImageFormatException(StegoException):
-    """Exception raised when an unsupported image format is uploaded."""
+
+class EncodingException(StegoAppException):
+    """Raised when steganographic encoding or encryption fails."""
+    pass
+
+
+class DecodingException(StegoAppException):
+    """Raised when steganographic extraction or decryption fails."""
+    pass
+
+
+class MetricsException(StegoAppException):
+    """Raised when quality metric evaluation fails."""
+    pass
+
+
+class ConfigurationException(StegoAppException):
+    """Raised when application configuration or settings are invalid."""
     pass

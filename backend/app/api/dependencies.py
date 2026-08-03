@@ -1,12 +1,16 @@
 """
 FastAPI dependency injection providers.
-Services are provided via dependencies to allow clean unit testing and mock overrides.
+Service instances are injected into endpoints via FastAPI Depends to prevent direct service-to-service coupling.
 """
 from app.core.config import settings, Settings
 from app.services.encoding_service import EncodingService
 from app.services.decoding_service import DecodingService
 from app.services.comparison_service import ComparisonService
 from app.services.metrics_service import MetricsService
+from app.services.image_service import ImageService
+from app.services.validation_service import ValidationService
+from app.services.health_service import HealthService
+from app.services.report_service import ReportService
 
 
 def get_settings() -> Settings:
@@ -32,3 +36,23 @@ def get_comparison_service() -> ComparisonService:
 def get_metrics_service() -> MetricsService:
     """Dependency provider for MetricsService."""
     return MetricsService()
+
+
+def get_image_service() -> ImageService:
+    """Dependency provider for ImageService."""
+    return ImageService()
+
+
+def get_validation_service() -> ValidationService:
+    """Dependency provider for ValidationService."""
+    return ValidationService()
+
+
+def get_health_service() -> HealthService:
+    """Dependency provider for HealthService."""
+    return HealthService()
+
+
+def get_report_service() -> ReportService:
+    """Dependency provider for ReportService."""
+    return ReportService()

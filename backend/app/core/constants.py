@@ -1,5 +1,5 @@
 """
-Global system constants for Hybrid Image Steganography System API.
+Global system constants and domain constraints for Hybrid Image Steganography System API.
 """
 
 # API Versioning Prefix
@@ -16,3 +16,16 @@ TAG_METRICS = "Metrics"
 MSG_BACKEND_RUNNING = "Hybrid Image Steganography Backend Running"
 MSG_HEALTH_OK = "healthy"
 MSG_STATUS_ONLINE = "online"
+
+# Domain Validation Constraints & Defaults
+SUPPORTED_ALGORITHMS = ["LSB", "DCT", "DWT"]
+SUPPORTED_IMAGE_TYPES = ["PNG", "JPEG", "BMP", "WEBP"]
+MAX_IMAGE_SIZE_BYTES = 10485760  # 10 MB in bytes
+MAX_MESSAGE_LENGTH = 10000
+MIN_PASSWORD_LENGTH = 8
+MAX_PASSWORD_LENGTH = 128
+
+# Application Default Values
+DEFAULT_ALGORITHM = "LSB"
+DEFAULT_TEMP_DIR = "app/temp"
+DEFAULT_STATIC_DIR = "app/static"

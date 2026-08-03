@@ -30,3 +30,13 @@ class UploadStatus(str, Enum):
     FAILED = "FAILED"
     PENDING = "PENDING"
     EXPIRED = "EXPIRED"
+
+
+class PipelineStatus(str, Enum):
+    """Pipeline execution lifecycle status state machine."""
+    CREATED = "CREATED"
+    VALIDATING = "VALIDATING"
+    PREPARING = "PREPARING"
+    PROCESSING = "PROCESSING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"

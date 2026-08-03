@@ -50,6 +50,23 @@ class UploadFailedException(ImageException):
     pass
 
 
+class PipelineException(StegoAppException):
+    """Base exception for pipeline execution errors."""
+    pass
+
+
+class PipelineStageException(PipelineException):
+    """Raised when a specific pipeline stage execution fails."""
+    def __init__(self, stage_name: str, message: str, details: str = None):
+        super().__init__(f"Stage '{stage_name}' failed: {message}", details=details)
+        self.stage_name = stage_name
+
+
+class PipelineTimeoutException(PipelineException):
+    """Raised when pipeline execution exceeds maximum timeout limit."""
+    pass
+
+
 class EncodingException(StegoAppException):
     """Raised when steganographic encoding or encryption fails."""
     pass

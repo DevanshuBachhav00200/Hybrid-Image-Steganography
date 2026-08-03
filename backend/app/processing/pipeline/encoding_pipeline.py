@@ -1,6 +1,6 @@
 import time
 from typing import Optional
-from app.core.enums import PipelineStatus, StatusType
+from app.core.enums import PipelineStatus, StatusType, EmbeddingAlgorithm
 from app.core.exceptions import PipelineStageException, PipelineException
 from app.core.logging import logger
 from app.schemas.requests import EncodeRequest
@@ -13,13 +13,15 @@ from app.services.metrics_service import MetricsService
 from app.processing.morse.service import MorseService
 from app.processing.aes.service import AESService
 from app.processing.binary.service import BinaryService
+from app.processing.payload.service import PayloadService
+from app.processing.payload.embedding_manager import EmbeddingManager
 from app.processing.factories import EmbeddingFactory
 
 
 class EncodingPipeline:
     """
     Enterprise Encoding Pipeline Orchestrator coordinating all stages of steganographic
-    message embedding: Validation -> Image Prep -> Morse -> AES -> Binary -> Embedding -> Metrics -> Response.
+    message embedding: Validation -> Image Prep -> Morse -> AES -> Binary -> Payload Builder -> Embedding Manager -> Metrics -> Response.
     """
 
     def __init__(self):
@@ -29,6 +31,8 @@ class EncodingPipeline:
         self.morse_service = MorseService()
         self.aes_service = AESService()
         self.binary_service = BinaryService()
+        self.payload_service = PayloadService()
+        self.embedding_manager = EmbeddingManager()
 
     def execute(self, request: EncodeRequest, metadata: Optional[ImageMetadata] = None) -> EncodeResponse:
         """
@@ -51,6 +55,7 @@ class EncodingPipeline:
             self.morse_stage(ctx)
             self.encryption_stage(ctx)
             self.binary_stage(ctx)
+            self.payload_stage(ctx)
             self.embedding_stage(ctx)
             self.metrics_stage(ctx)
             return self.response_stage(ctx)
@@ -133,24 +138,41 @@ class EncodingPipeline:
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        # Active Binary Conversion Stage (Phase 3D.4)
         aes_payload = ctx.temp_data.get("aes_payload")
         binary_bitstream = self.binary_service.serialize(aes_payload)
         ctx.temp_data["binary_bitstream"] = binary_bitstream
 
         logger.info(f"[Pipeline Event] Stage Completed: {stage_name} (Bitstream length: {len(binary_bitstream)} bits)")
 
+    def payload_stage(self, ctx: PipelineContext) -> None:
+        """Stage 7: Package binary bitstream into validated Payload object."""
+        stage_name = "PAYLOAD_BUILDER"
+        ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
+        logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
+
+        binary_bitstream = ctx.temp_data.get("binary_bitstream")
+        alg_enum = EmbeddingAlgorithm(ctx.algorithm) if ctx.algorithm in EmbeddingAlgorithm.__members__ else EmbeddingAlgorithm.AUTO
+
+        payload_obj = self.payload_service.build(binary_bitstream, alg_enum)
+        ctx.temp_data["payload_object"] = payload_obj
+
+        logger.info(f"[Pipeline Event] Stage Completed: {stage_name} (Payload ID: {payload_obj.payload_id})")
+
     def embedding_stage(self, ctx: PipelineContext) -> None:
-        """Stage 7: Embed binary bitstream into cover image via LSB, DCT, or DWT."""
+        """Stage 8: Prepare embedding request and dispatch to LSB/DCT/DWT embedding strategy."""
         stage_name = "IMAGE_EMBEDDING"
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        strategy = EmbeddingFactory.get_embedding_strategy(ctx.algorithm)
-        raise NotImplementedError("Image embedding stage not implemented yet.")
+        payload_obj = ctx.temp_data.get("payload_object")
+        embedding_request = self.embedding_manager.prepare_embedding(payload_obj, ctx.metadata)
+        ctx.temp_data["embedding_request"] = embedding_request
+
+        # Raises NotImplementedError until low-level embedding strategies are implemented in Phase 3E
+        self.embedding_manager.dispatch(embedding_request)
 
     def metrics_stage(self, ctx: PipelineContext) -> None:
-        """Stage 8: Calculate PSNR, SSIM, MSE image distortion metrics."""
+        """Stage 9: Calculate PSNR, SSIM, MSE image distortion metrics."""
         stage_name = "METRICS_GENERATION"
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
@@ -158,7 +180,7 @@ class EncodingPipeline:
         self.metrics_service.calculate_metrics(None)
 
     def response_stage(self, ctx: PipelineContext) -> EncodeResponse:
-        """Stage 9: Format final operational payload response."""
+        """Stage 10: Format final operational payload response."""
         stage_name = "BUILD_RESPONSE"
         ctx.advance_stage(stage_name, PipelineStatus.COMPLETED)
         ctx.complete()

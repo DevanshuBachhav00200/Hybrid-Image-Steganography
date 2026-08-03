@@ -14,6 +14,7 @@ from app.services.report_service import ReportService
 from app.processing.morse.service import MorseService
 from app.processing.aes.service import AESService
 from app.processing.binary.service import BinaryService
+from app.processing.payload.service import PayloadService
 
 
 def get_settings() -> Settings:
@@ -74,3 +75,8 @@ def get_aes_service() -> AESService:
 def get_binary_service() -> BinaryService:
     """Dependency provider for BinaryService."""
     return BinaryService()
+
+
+def get_payload_service() -> PayloadService:
+    """Dependency provider for PayloadService."""
+    return PayloadService()

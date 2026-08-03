@@ -8,6 +8,14 @@ class AlgorithmType(str, Enum):
     DWT = "DWT"
 
 
+class EmbeddingAlgorithm(str, Enum):
+    """Supported steganography embedding algorithms including auto-selection."""
+    LSB = "LSB"
+    DCT = "DCT"
+    DWT = "DWT"
+    AUTO = "AUTO"
+
+
 class OperationType(str, Enum):
     """Supported steganography operations."""
     ENCODE = "ENCODE"
@@ -39,4 +47,12 @@ class PipelineStatus(str, Enum):
     PREPARING = "PREPARING"
     PROCESSING = "PROCESSING"
     COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
+class PayloadStatus(str, Enum):
+    """Payload preparation status lifecycle."""
+    READY = "READY"
+    INVALID = "INVALID"
+    PREPARED = "PREPARED"
     FAILED = "FAILED"

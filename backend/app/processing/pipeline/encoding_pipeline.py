@@ -10,7 +10,7 @@ from app.processing.pipeline.context import PipelineContext
 from app.services.validation_service import ValidationService
 from app.services.image_service import ImageService
 from app.services.metrics_service import MetricsService
-from app.processing.morse.service import MorseProcessingService
+from app.processing.morse.service import MorseService
 from app.processing.aes.service import AESProcessingService
 from app.processing.binary.service import BinaryProcessingService
 from app.processing.factories import EmbeddingFactory
@@ -26,7 +26,7 @@ class EncodingPipeline:
         self.validation_service = ValidationService()
         self.image_service = ImageService()
         self.metrics_service = MetricsService()
-        self.morse_service = MorseProcessingService()
+        self.morse_service = MorseService()
         self.aes_service = AESProcessingService()
         self.binary_service = BinaryProcessingService()
 
@@ -99,18 +99,20 @@ class EncodingPipeline:
         ctx.advance_stage(stage_name, PipelineStatus.PREPARING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        # Image prep placeholder
         ctx.temp_data["image_ready"] = True
         logger.info(f"[Pipeline Event] Stage Completed: {stage_name}")
 
     def morse_stage(self, ctx: PipelineContext) -> None:
-        """Stage 4: Convert plain text message to Morse code sequence."""
+        """Stage 4: Convert plain text message to International Morse Code sequence."""
         stage_name = "MORSE_ENCODING"
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        # Will invoke self.morse_service.text_to_morse() in Phase 3D.2
-        raise NotImplementedError("Morse encoding stage not implemented yet.")
+        # Active Morse Encoding Stage (Phase 3D.2)
+        morse_payload = self.morse_service.encode(ctx.request.message)
+        ctx.temp_data["morse_payload"] = morse_payload
+        
+        logger.info(f"[Pipeline Event] Stage Completed: {stage_name} (Morse symbols: {len(morse_payload)})")
 
     def encryption_stage(self, ctx: PipelineContext) -> None:
         """Stage 5: Encrypt Morse code using AES-256 password key."""

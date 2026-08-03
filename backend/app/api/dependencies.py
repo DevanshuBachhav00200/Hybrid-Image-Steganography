@@ -13,6 +13,7 @@ from app.services.health_service import HealthService
 from app.services.report_service import ReportService
 from app.processing.morse.service import MorseService
 from app.processing.aes.service import AESService
+from app.processing.binary.service import BinaryService
 
 
 def get_settings() -> Settings:
@@ -68,3 +69,8 @@ def get_morse_service() -> MorseService:
 def get_aes_service() -> AESService:
     """Dependency provider for AESService."""
     return AESService()
+
+
+def get_binary_service() -> BinaryService:
+    """Dependency provider for BinaryService."""
+    return BinaryService()

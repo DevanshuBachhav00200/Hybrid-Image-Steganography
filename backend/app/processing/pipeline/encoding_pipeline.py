@@ -12,7 +12,7 @@ from app.services.image_service import ImageService
 from app.services.metrics_service import MetricsService
 from app.processing.morse.service import MorseService
 from app.processing.aes.service import AESService
-from app.processing.binary.service import BinaryProcessingService
+from app.processing.binary.service import BinaryService
 from app.processing.factories import EmbeddingFactory
 
 
@@ -28,7 +28,7 @@ class EncodingPipeline:
         self.metrics_service = MetricsService()
         self.morse_service = MorseService()
         self.aes_service = AESService()
-        self.binary_service = BinaryProcessingService()
+        self.binary_service = BinaryService()
 
     def execute(self, request: EncodeRequest, metadata: Optional[ImageMetadata] = None) -> EncodeResponse:
         """
@@ -119,7 +119,6 @@ class EncodingPipeline:
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        # Active AES-256-GCM Encryption Stage (Phase 3D.3)
         morse_payload = ctx.temp_data.get("morse_payload")
         password = ctx.request.password
 
@@ -129,12 +128,17 @@ class EncodingPipeline:
         logger.info(f"[Pipeline Event] Stage Completed: {stage_name}")
 
     def binary_stage(self, ctx: PipelineContext) -> None:
-        """Stage 6: Convert AES cipher payload into binary bitstream."""
+        """Stage 6: Convert AES cipher payload into MSB-first binary bitstream string."""
         stage_name = "BINARY_CONVERSION"
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        raise NotImplementedError("Binary conversion stage not implemented yet.")
+        # Active Binary Conversion Stage (Phase 3D.4)
+        aes_payload = ctx.temp_data.get("aes_payload")
+        binary_bitstream = self.binary_service.serialize(aes_payload)
+        ctx.temp_data["binary_bitstream"] = binary_bitstream
+
+        logger.info(f"[Pipeline Event] Stage Completed: {stage_name} (Bitstream length: {len(binary_bitstream)} bits)")
 
     def embedding_stage(self, ctx: PipelineContext) -> None:
         """Stage 7: Embed binary bitstream into cover image via LSB, DCT, or DWT."""

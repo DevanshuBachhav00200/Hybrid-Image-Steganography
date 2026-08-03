@@ -1,7 +1,18 @@
 from abc import ABC, abstractmethod
+from typing import Dict, Any
 
-class BinaryConverter(ABC):
+
+class BinaryInterface(ABC):
+    """
+    Abstract Interface for Binary Bitstream Conversion and Parsing.
+    """
+
     @abstractmethod
-    def text_to_binary(self, text: str) -> str: pass
+    def serialize(self, aes_payload: Dict[str, Any]) -> str:
+        """Convert AES payload object into MSB-first binary bitstream string."""
+        pass
+
     @abstractmethod
-    def binary_to_text(self, binary: str) -> str: pass
+    def deserialize(self, bitstream: str) -> Dict[str, Any]:
+        """Convert MSB-first binary bitstream string back into AES payload object."""
+        pass

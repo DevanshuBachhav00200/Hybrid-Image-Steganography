@@ -1,25 +1,22 @@
-import sys
-from pathlib import Path
 from fastapi.testclient import TestClient
-
-# Ensure root backend dir is in sys.path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
 from app.main import app
 
 client = TestClient(app)
 
-def test_health_check():
-    response = client.get("/api/health")
-    assert response.status_code == 200
-    assert response.json() == {"status": "Coming Soon"}
 
-def test_version_check():
-    response = client.get("/api/version")
+def test_root_endpoint():
+    response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"status": "Coming Soon"}
+    assert response.json() == {"message": "Hybrid Image Steganography Backend Running"}
 
-def test_algorithms_check():
-    response = client.get("/api/algorithms")
+
+def test_health_endpoint():
+    response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "Coming Soon"}
+    assert response.json() == {"status": "healthy"}
+
+
+def test_api_v1_status_endpoint():
+    response = client.get("/api/v1/status")
+    assert response.status_code == 200
+    assert response.json() == {"backend": "online", "version": "1.0.0"}

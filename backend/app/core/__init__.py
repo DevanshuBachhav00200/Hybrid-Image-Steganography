@@ -1,1 +1,3 @@
-"""Core package initialization."""
+"""
+Core application module containing configurations, logging, security, and constants.
+"""

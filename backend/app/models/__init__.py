@@ -1,1 +1,3 @@
-"""Models package initialization."""
+"""
+Database models and data domain structures placeholder.
+"""

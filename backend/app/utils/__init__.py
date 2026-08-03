@@ -1,3 +1,3 @@
-from .image_processing import ImageUtils
-
-__all__ = ["ImageUtils"]
+"""
+General helper utilities module placeholder.
+"""

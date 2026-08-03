@@ -1,11 +1,7 @@
 from fastapi import APIRouter
-from app.api import health, encode, decode, compare, metrics, algorithms
+from app.api.routes import system
 
 api_router = APIRouter()
 
-api_router.include_router(health.router)
-api_router.include_router(encode.router)
-api_router.include_router(decode.router)
-api_router.include_router(compare.router)
-api_router.include_router(metrics.router)
-api_router.include_router(algorithms.router)
+# Include versioned system routes under /api/v1
+api_router.include_router(system.router)

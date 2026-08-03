@@ -1,1 +1,3 @@
-"""Schemas package initialization."""
+"""
+Pydantic schemas and data validation models.
+"""

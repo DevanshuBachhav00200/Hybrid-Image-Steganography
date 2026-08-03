@@ -11,7 +11,7 @@ from app.services.validation_service import ValidationService
 from app.services.image_service import ImageService
 from app.services.metrics_service import MetricsService
 from app.processing.morse.service import MorseService
-from app.processing.aes.service import AESProcessingService
+from app.processing.aes.service import AESService
 from app.processing.binary.service import BinaryProcessingService
 from app.processing.factories import EmbeddingFactory
 
@@ -27,7 +27,7 @@ class EncodingPipeline:
         self.image_service = ImageService()
         self.metrics_service = MetricsService()
         self.morse_service = MorseService()
-        self.aes_service = AESProcessingService()
+        self.aes_service = AESService()
         self.binary_service = BinaryProcessingService()
 
     def execute(self, request: EncodeRequest, metadata: Optional[ImageMetadata] = None) -> EncodeResponse:
@@ -108,19 +108,25 @@ class EncodingPipeline:
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        # Active Morse Encoding Stage (Phase 3D.2)
         morse_payload = self.morse_service.encode(ctx.request.message)
         ctx.temp_data["morse_payload"] = morse_payload
         
         logger.info(f"[Pipeline Event] Stage Completed: {stage_name} (Morse symbols: {len(morse_payload)})")
 
     def encryption_stage(self, ctx: PipelineContext) -> None:
-        """Stage 5: Encrypt Morse code using AES-256 password key."""
+        """Stage 5: Encrypt Morse code payload using AES-256-GCM and password key."""
         stage_name = "AES_ENCRYPTION"
         ctx.advance_stage(stage_name, PipelineStatus.PROCESSING)
         logger.info(f"[Pipeline Event] Stage Started: {stage_name}")
 
-        raise NotImplementedError("AES encryption stage not implemented yet.")
+        # Active AES-256-GCM Encryption Stage (Phase 3D.3)
+        morse_payload = ctx.temp_data.get("morse_payload")
+        password = ctx.request.password
+
+        aes_payload = self.aes_service.encrypt(morse_payload, password)
+        ctx.temp_data["aes_payload"] = aes_payload
+
+        logger.info(f"[Pipeline Event] Stage Completed: {stage_name}")
 
     def binary_stage(self, ctx: PipelineContext) -> None:
         """Stage 6: Convert AES cipher payload into binary bitstream."""

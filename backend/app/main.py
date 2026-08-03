@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from app.core.config import settings
 from app.core.constants import (
     TAG_SYSTEM,
+    TAG_UPLOAD,
     TAG_ENCODING,
     TAG_DECODING,
     TAG_COMPARISON,
@@ -21,6 +22,10 @@ tags_metadata = [
     {
         "name": TAG_SYSTEM,
         "description": "System health, configuration, and API status endpoints.",
+    },
+    {
+        "name": TAG_UPLOAD,
+        "description": "Image file upload, validation, metadata extraction, and storage management (PNG & BMP only).",
     },
     {
         "name": TAG_ENCODING,

@@ -1,5 +1,5 @@
 """
-Pydantic schemas for request validation and standardized API responses.
+Pydantic schemas for request validation, image uploads, and standardized API responses.
 """
 from app.schemas.health import RootResponse, HealthResponse as LegacyHealthResponse
 from app.schemas.requests import EncodeRequest, DecodeRequest, CompareRequest, MetricsRequest
@@ -14,6 +14,12 @@ from app.schemas.responses import (
     DecodeResponse,
     CompareResponse,
     MetricsResponse,
+)
+from app.schemas.upload import (
+    ImageMetadata,
+    UploadSuccessResponse,
+    UploadErrorDetail,
+    UploadErrorResponse,
 )
 
 __all__ = [
@@ -32,4 +38,8 @@ __all__ = [
     "DecodeResponse",
     "CompareResponse",
     "MetricsResponse",
+    "ImageMetadata",
+    "UploadSuccessResponse",
+    "UploadErrorDetail",
+    "UploadErrorResponse",
 ]

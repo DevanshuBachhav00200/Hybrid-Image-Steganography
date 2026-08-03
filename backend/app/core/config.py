@@ -19,10 +19,19 @@ class Settings(BaseSettings):
     # CORS Configuration
     ALLOWED_ORIGINS: Union[List[str], str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
     
-    # Logging & Storage
+    # Logging & Storage Configuration
     LOG_LEVEL: str = "INFO"
     TEMP_DIRECTORY: str = "app/temp"
+    TEMP_UPLOADS_DIRECTORY: str = "app/temp/uploads"
     MAX_UPLOAD_SIZE: int = 10485760  # 10MB default
+    
+    # Image Upload Validation Bounds
+    MIN_IMAGE_WIDTH: int = 10
+    MIN_IMAGE_HEIGHT: int = 10
+    MAX_IMAGE_WIDTH: int = 8192
+    MAX_IMAGE_HEIGHT: int = 8192
+    MAX_MEGAPIXELS: int = 64
+    TEMP_FILE_EXPIRATION_SECONDS: int = 3600  # 1 hour expiration
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
     def parse_allowed_origins(cls, v: Union[str, List[str]]) -> List[str]:

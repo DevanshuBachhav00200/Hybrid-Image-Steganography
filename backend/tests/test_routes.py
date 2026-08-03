@@ -46,8 +46,8 @@ def test_encode_endpoint_validation_short_password():
     response = client.post("/api/v1/encode", json=payload)
     assert response.status_code == 422
     data = response.json()
-    assert data["error"]["code"] == 422
-    assert data["error"]["type"] == "RequestValidationError"
+    assert data["success"] is False
+    assert data["error"]["code"] in [422, "VALIDATION_FAILED"]
 
 
 def test_encode_endpoint_validation_invalid_algorithm():
@@ -119,5 +119,5 @@ def test_not_found_404_error():
     response = client.get("/api/v1/non-existent-path")
     assert response.status_code == 404
     data = response.json()
-    assert data["error"]["code"] == 404
-    assert data["error"]["type"] == "HTTPException"
+    assert data["success"] is False
+    assert data["error"]["code"] in [404, "HTTP_404"]

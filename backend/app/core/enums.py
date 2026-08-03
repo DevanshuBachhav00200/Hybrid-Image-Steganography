@@ -22,3 +22,11 @@ class StatusType(str, Enum):
     PENDING = "PENDING"
     READY = "READY"
     NOT_IMPLEMENTED = "NOT_IMPLEMENTED"
+
+
+class UploadStatus(str, Enum):
+    """Temporary upload file status indicator."""
+    SUCCESS = "SUCCESS"
+    FAILED = "FAILED"
+    PENDING = "PENDING"
+    EXPIRED = "EXPIRED"

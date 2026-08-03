@@ -16,7 +16,37 @@ class ValidationException(StegoAppException):
 
 
 class ImageException(StegoAppException):
-    """Raised when image processing or format validation fails."""
+    """Base exception for image processing or format validation failures."""
+    pass
+
+
+class InvalidImageException(ImageException):
+    """Raised when uploaded file is not a valid image or is structurally invalid."""
+    pass
+
+
+class CorruptedImageException(ImageException):
+    """Raised when an image file header or pixel data is corrupted."""
+    pass
+
+
+class UnsupportedFormatException(ImageException):
+    """Raised when image format (e.g. JPEG, WEBP, GIF) is not supported (PNG & BMP only)."""
+    pass
+
+
+class ImageTooLargeException(ImageException):
+    """Raised when uploaded image byte size exceeds maximum allowed limit."""
+    pass
+
+
+class ImageDimensionException(ImageException):
+    """Raised when image width, height, or megapixels violate dimension boundaries."""
+    pass
+
+
+class UploadFailedException(ImageException):
+    """Raised when file save or upload processing fails."""
     pass
 
 

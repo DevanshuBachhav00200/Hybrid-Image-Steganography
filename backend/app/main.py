@@ -24,19 +24,19 @@ tags_metadata = [
     },
     {
         "name": TAG_ENCODING,
-        "description": "Text to Morse, AES encryption, and image embedding operations (Future Phase).",
+        "description": "Text to Morse, AES encryption, and image embedding operations.",
     },
     {
         "name": TAG_DECODING,
-        "description": "Stego image extraction, AES decryption, and Morse decoding operations (Future Phase).",
+        "description": "Stego image extraction, AES decryption, and Morse decoding operations.",
     },
     {
         "name": TAG_COMPARISON,
-        "description": "Steganography algorithm comparison and performance evaluation (Future Phase).",
+        "description": "Steganography algorithm comparison and performance evaluation.",
     },
     {
         "name": TAG_METRICS,
-        "description": "Image quality metrics calculation including PSNR, SSIM, and MSE (Future Phase).",
+        "description": "Image quality metrics calculation including PSNR, SSIM, and MSE.",
     },
 ]
 
@@ -59,7 +59,7 @@ app = FastAPI(
     description="Professional backend API for Hybrid Image Steganography using Morse Encoding, AES Encryption, and Multi-Domain Image Embedding.",
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json",
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
     openapi_tags=tags_metadata,
     lifespan=lifespan,
 )
@@ -69,7 +69,7 @@ setup_cors(app)
 app.add_middleware(RequestLoggerMiddleware)
 setup_exception_handlers(app)
 
-# Mount Health & System Routes
+# Mount Root Health Router & Versioned API v1 Router
 app.include_router(health.router)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

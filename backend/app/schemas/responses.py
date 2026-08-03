@@ -1,45 +1,83 @@
+from typing import Generic, TypeVar, Optional, Any, Dict, List
 from pydantic import BaseModel, Field
-from typing import Any, Optional, Dict
+from app.core.enums import StatusType
 
-class BaseStatusResponse(BaseModel):
-    status: str = Field("Coming Soon", description="Operation status indicator")
+T = TypeVar("T")
 
-class HealthCheckResponse(BaseStatusResponse):
-    app_name: str = "Hybrid Image Steganography System"
-    version: str = "1.0.0"
-    status: str = "Coming Soon"
 
-class VersionResponse(BaseStatusResponse):
-    version: str = "1.0.0"
-    api_prefix: str = "/api"
-    status: str = "Coming Soon"
+class RootResponse(BaseModel):
+    """Root endpoint greeting response schema."""
+    message: str = Field(..., json_schema_extra={"example": "Hybrid Image Steganography Backend Running"})
 
-class AlgorithmInfo(BaseModel):
-    id: str
-    name: str
-    domain: str
-    description: str
 
-class AlgorithmsResponse(BaseStatusResponse):
-    algorithms: list[AlgorithmInfo] = []
-    status: str = "Coming Soon"
+class ErrorDetail(BaseModel):
+    code: int = Field(..., description="HTTP or error status code", json_schema_extra={"example": 400})
+    message: str = Field(..., description="Human-readable error description", json_schema_extra={"example": "Validation error"})
+    type: str = Field(..., description="Error exception type name", json_schema_extra={"example": "RequestValidationError"})
+    details: Optional[Any] = Field(None, description="Detailed validation breakdown or trace info")
 
-class EncodeResponse(BaseStatusResponse):
-    job_id: Optional[str] = None
-    stego_image_url: Optional[str] = None
-    status: str = "Coming Soon"
 
-class DecodeResponse(BaseStatusResponse):
-    extracted_message: Optional[str] = None
-    status: str = "Coming Soon"
+class ErrorResponse(BaseModel):
+    """Standardized JSON error wrapper."""
+    error: ErrorDetail
 
-class CompareResponse(BaseStatusResponse):
-    psnr: Optional[float] = None
-    ssim: Optional[float] = None
-    mse: Optional[float] = None
-    histogram_diff: Optional[Dict[str, Any]] = None
-    status: str = "Coming Soon"
 
-class MetricsResponse(BaseStatusResponse):
-    metrics: Dict[str, Any] = Field(default_factory=dict)
-    status: str = "Coming Soon"
+class SuccessResponse(BaseModel, Generic[T]):
+    """Generic wrapper for successful operational payloads."""
+    status: StatusType = Field(default=StatusType.SUCCESS, description="Operation status indicator")
+    message: str = Field(..., description="Operational response summary")
+    data: Optional[T] = Field(None, description="Response payload")
+
+
+class HealthResponse(BaseModel):
+    """Service health response schema."""
+    status: str = Field(..., json_schema_extra={"example": "healthy"})
+
+
+class StatusResponse(BaseModel):
+    """API online status response schema."""
+    backend: str = Field(..., json_schema_extra={"example": "online"})
+    version: str = Field(..., json_schema_extra={"example": "1.0.0"})
+
+
+class VersionResponse(BaseModel):
+    """API version information response schema."""
+    app_name: str = Field(..., json_schema_extra={"example": "Hybrid Image Steganography System API"})
+    version: str = Field(..., json_schema_extra={"example": "1.0.0"})
+    api_prefix: str = Field(..., json_schema_extra={"example": "/api/v1"})
+
+
+class DocsInfoResponse(BaseModel):
+    """API documentation URLs response schema."""
+    swagger_url: str = Field(..., json_schema_extra={"example": "/docs"})
+    redoc_url: str = Field(..., json_schema_extra={"example": "/redoc"})
+    openapi_url: str = Field(..., json_schema_extra={"example": "/api/v1/openapi.json"})
+
+
+class EncodeResponse(BaseModel):
+    """Encoding operational response schema."""
+    status: StatusType = Field(default=StatusType.NOT_IMPLEMENTED, json_schema_extra={"example": "Not Implemented Yet"})
+    message: str = Field(..., json_schema_extra={"example": "Encode endpoint ready."})
+    stego_image: Optional[str] = Field(None, description="Base64 encoded output stego image")
+    metrics: Optional[Dict[str, Any]] = Field(None, description="Performance and distortion metrics")
+
+
+class DecodeResponse(BaseModel):
+    """Decoding operational response schema."""
+    status: StatusType = Field(default=StatusType.NOT_IMPLEMENTED, json_schema_extra={"example": "Not Implemented Yet"})
+    message: str = Field(..., json_schema_extra={"example": "Decode endpoint ready."})
+    decoded_message: Optional[str] = Field(None, description="Extracted plain text message")
+
+
+class CompareResponse(BaseModel):
+    """Algorithm comparison operational response schema."""
+    status: StatusType = Field(default=StatusType.NOT_IMPLEMENTED, json_schema_extra={"example": "Not Implemented Yet"})
+    message: str = Field(..., json_schema_extra={"example": "Compare endpoint ready."})
+    results: Optional[Dict[str, Any]] = Field(None, description="Comparative benchmark metrics for LSB, DCT, DWT")
+
+
+class MetricsResponse(BaseModel):
+    """Image quality metrics response schema."""
+    status: StatusType = Field(default=StatusType.NOT_IMPLEMENTED, json_schema_extra={"example": "Not Implemented Yet"})
+    message: str = Field(..., json_schema_extra={"example": "Metrics endpoint ready."})
+    metrics: Optional[Dict[str, Any]] = Field(None, description="Calculated PSNR, SSIM, MSE metrics")

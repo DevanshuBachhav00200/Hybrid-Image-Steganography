@@ -36,8 +36,8 @@ def test_encoding_pipeline_execution():
     )
 
     response = pipeline.execute(payload)
-    assert response.status == "NOT_IMPLEMENTED"
-    assert response.message == "Encode endpoint ready."
+    assert response.status == "READY"
+    assert response.message == "Payload prepared successfully and ready for steganographic embedding."
 
 
 def test_encoding_pipeline_exception_propagation():

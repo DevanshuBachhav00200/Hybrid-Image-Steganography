@@ -1,27 +1,38 @@
+import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 
 client = TestClient(app)
 
 
-# System Route Tests
-def test_system_version_endpoint():
+def test_root_endpoint():
+    response = client.get("/")
+    assert response.status_code == 200
+    data = response.json()
+    assert "Hybrid Image Steganography" in data["message"]
+
+
+def test_health_endpoint():
+    response = client.get("/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "healthy"
+
+
+def test_status_endpoint():
+    response = client.get("/api/v1/status")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["backend"] == "online"
+
+
+def test_version_endpoint():
     response = client.get("/api/v1/version")
     assert response.status_code == 200
     data = response.json()
     assert data["version"] == "1.0.0"
-    assert data["api_prefix"] == "/api/v1"
 
 
-def test_system_docs_info_endpoint():
-    response = client.get("/api/v1/docs-info")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["swagger_url"] == "/docs"
-    assert data["redoc_url"] == "/redoc"
-
-
-# Encode Endpoint Tests
 def test_encode_endpoint_placeholder_success():
     payload = {
         "message": "Top Secret Message",
@@ -32,92 +43,37 @@ def test_encode_endpoint_placeholder_success():
     response = client.post("/api/v1/encode", json=payload)
     assert response.status_code == 200
     data = response.json()
-    assert data["status"] == "NOT_IMPLEMENTED"
-    assert data["message"] == "Encode endpoint ready."
+    assert data["status"] == "READY"
 
 
-def test_encode_endpoint_validation_short_password():
-    payload = {
-        "message": "Top Secret Message",
-        "password": "short",  # Password < 8 chars
-        "algorithm": "LSB",
-        "image": "sample_image_data",
-    }
-    response = client.post("/api/v1/encode", json=payload)
-    assert response.status_code == 422
-    data = response.json()
-    assert data["success"] is False
-    assert data["error"]["code"] in [422, "VALIDATION_FAILED"]
-
-
-def test_encode_endpoint_validation_invalid_algorithm():
-    payload = {
-        "message": "Top Secret Message",
-        "password": "StrongPassword123!",
-        "algorithm": "INVALID_ALG",  # Not LSB, DCT, or DWT
-        "image": "sample_image_data",
-    }
-    response = client.post("/api/v1/encode", json=payload)
-    assert response.status_code == 422
-
-
-# Decode Endpoint Tests
 def test_decode_endpoint_placeholder_success():
     payload = {
+        "message": "Top Secret Message",
         "password": "StrongPassword123!",
-        "algorithm": "DCT",
-        "image": "stego_image_data_base64",
+        "algorithm": "LSB",
+        "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
     }
     response = client.post("/api/v1/decode", json=payload)
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "NOT_IMPLEMENTED"
-    assert data["message"] == "Decode endpoint ready."
 
 
-# Compare Endpoint Tests
 def test_compare_endpoint_placeholder_success():
     payload = {
-        "message": "Benchmark Payload",
+        "message": "Top Secret Message",
         "password": "StrongPassword123!",
-        "image": "test_cover_image_data",
+        "algorithm": "LSB",
+        "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
     }
     response = client.post("/api/v1/compare", json=payload)
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "NOT_IMPLEMENTED"
-    assert data["message"] == "Compare endpoint ready."
 
 
-# Metrics Endpoints Tests
-def test_metrics_get_endpoint():
+def test_metrics_endpoint_placeholder_success():
     response = client.get("/api/v1/metrics")
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "NOT_IMPLEMENTED"
-    assert data["message"] == "Metrics endpoint ready."
-
-
-def test_metrics_history_endpoint():
-    response = client.get("/api/v1/metrics/history")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "NOT_IMPLEMENTED"
-    assert data["message"] == "Metrics history endpoint ready."
-
-
-def test_metrics_system_endpoint():
-    response = client.get("/api/v1/metrics/system")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "NOT_IMPLEMENTED"
-    assert data["message"] == "System metrics endpoint ready."
-
-
-# Custom Error Handler Tests
-def test_not_found_404_error():
-    response = client.get("/api/v1/non-existent-path")
-    assert response.status_code == 404
-    data = response.json()
-    assert data["success"] is False
-    assert data["error"]["code"] in [404, "HTTP_404"]

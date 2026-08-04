@@ -13,6 +13,7 @@ from app.steganography.dwt.capacity import DWTCapacityCalculator
 from app.steganography.dwt.transform import DWTTransformer
 from app.steganography.dwt.reconstruction import DWTReconstructor
 from app.steganography.dwt.validator import DWTValidator
+from app.steganography.dwt.embed import DWTEmbedder
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +29,19 @@ class DWTSteganography(EmbeddingStrategy):
         transformer: Optional[DWTTransformer] = None,
         reconstructor: Optional[DWTReconstructor] = None,
         validator: Optional[DWTValidator] = None,
+        embedder: Optional[DWTEmbedder] = None,
     ):
         self.capacity_calculator = capacity_calculator or DWTCapacityCalculator()
         self.transformer = transformer or DWTTransformer()
         self.reconstructor = reconstructor or DWTReconstructor()
         self.validator = validator or DWTValidator()
+        self.embedder = embedder or DWTEmbedder(
+            capacity_calculator=self.capacity_calculator,
+            transformer=self.transformer,
+            reconstructor=self.reconstructor,
+            validator=self.validator,
+        )
+
 
     def calculate_capacity(
         self,
@@ -110,9 +119,11 @@ class DWTSteganography(EmbeddingStrategy):
         options: Optional[Dict[str, Any]] = None,
     ) -> Tuple[bytes, Dict[str, Any]]:
         """
-        Embed payload (Scheduled for Phase 4C.3).
+        Embed binary payload into cover image DWT frequency coefficients.
         """
-        raise NotImplementedError("DWT payload embedding logic is scheduled for Phase 4C.3.")
+        result = self.embedder.embed(cover_image_bytes, payload_data, options=options)
+        return result.stego_image_bytes, result.model_dump()
+
 
     def extract(
         self,

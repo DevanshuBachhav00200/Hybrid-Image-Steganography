@@ -201,6 +201,31 @@ class DWTTransformResult(BaseModel):
     image_metadata: Dict[str, Any]
 
 
+class DWTEmbeddingResult(BaseModel):
+    """
+    Structured response model returned by DWT Embedding Engine.
+    """
+    stego_image_bytes: bytes
+    payload_size_bits: int
+    payload_size_bytes: int
+    usable_capacity_bits: int
+    capacity_used_percentage: float
+    remaining_capacity_bits: int
+    coefficients_modified: int
+    total_coefficients: int
+    wavelet_family: str
+    decomposition_level: int
+    selected_subbands: List[str]
+    psnr_db: float
+    mse: float
+    embedding_time_ms: float
+    format: str
+    color_mode: str
+    dimensions: Tuple[int, int]
+    success: bool
+
+
+
 
 
 

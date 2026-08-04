@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, List
+
 from pydantic import BaseModel
 
 
@@ -167,6 +168,38 @@ class DCTExtractionResult(BaseModel):
     extraction_time_ms: float
     success: bool
     image_metadata: Dict[str, Any]
+
+
+class DWTCapacityResult(BaseModel):
+    """
+    Structured response model returned by DWT Capacity Calculator.
+    """
+    total_coefficients: int
+    header_reserved_bits: int
+    usable_capacity_bits: int
+    usable_capacity_bytes: int
+    payload_size_bits: int
+    remaining_capacity_bits: int
+    capacity_used_percentage: float
+    wavelet_family: str
+    decomposition_level: int
+    selected_subbands: List[str]
+    dimensions: Tuple[int, int]
+    color_mode: str
+    success: bool
+
+
+class DWTTransformResult(BaseModel):
+    """
+    Structured response model returned after forward DWT decomposition.
+    """
+    wavelet_family: str
+    decomposition_level: int
+    subbands_info: Dict[str, Any]
+    transform_execution_time_ms: float
+    validation_status: bool
+    image_metadata: Dict[str, Any]
+
 
 
 

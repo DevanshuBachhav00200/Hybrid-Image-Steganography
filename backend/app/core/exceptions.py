@@ -271,3 +271,24 @@ class MetricsException(StegoAppException):
 class ConfigurationException(StegoAppException):
     """Raised when application configuration or settings are invalid."""
     pass
+
+
+class WaveletTransformException(TransformException):
+    """Raised when 2D-DWT forward or inverse transform fails."""
+    pass
+
+
+class SubbandException(StegoAppException):
+    """Raised when DWT sub-band management or coefficient slicing fails."""
+    pass
+
+
+class ReconstructionException(TransformException):
+    """Raised when image spatial domain reconstruction from sub-band coefficients fails."""
+    pass
+
+
+class CapacityCalculationException(CapacityException):
+    """Raised when DWT capacity calculation or statistics computation fails."""
+    pass
+

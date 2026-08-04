@@ -152,6 +152,24 @@ class DCTEmbeddingResult(BaseModel):
     success: bool
 
 
+class DCTExtractionResult(BaseModel):
+
+    """
+    Structured response model returned after successful DCT steganographic payload extraction.
+    """
+    recovered_payload: str
+    payload_size_bits: int
+    payload_size_bytes: int
+    header_info: Dict[str, Any]
+    coefficients_read: int
+    total_blocks_scanned: int
+    quantization_step: float
+    extraction_time_ms: float
+    success: bool
+    image_metadata: Dict[str, Any]
+
+
+
 
 
 

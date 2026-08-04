@@ -13,6 +13,7 @@ from app.steganography.dct.capacity import DCTCapacityCalculator
 from app.steganography.dct.transform import DCTTransformer
 from app.steganography.dct.validator import DCTValidator
 from app.steganography.dct.embed import DCTEmbedder
+from app.steganography.dct.extract import DCTExtractor
 
 
 class DCTSteganography(EmbeddingStrategy):
@@ -26,11 +27,17 @@ class DCTSteganography(EmbeddingStrategy):
         transformer: Optional[DCTTransformer] = None,
         validator: Optional[DCTValidator] = None,
         embedder: Optional[DCTEmbedder] = None,
+        extractor: Optional[DCTExtractor] = None,
     ):
         self.capacity_calculator = capacity_calculator or DCTCapacityCalculator()
         self.transformer = transformer or DCTTransformer()
         self.validator = validator or DCTValidator(self.capacity_calculator)
         self.embedder = embedder or DCTEmbedder(
+            capacity_calculator=self.capacity_calculator,
+            transformer=self.transformer,
+            validator=self.validator,
+        )
+        self.extractor = extractor or DCTExtractor(
             capacity_calculator=self.capacity_calculator,
             transformer=self.transformer,
             validator=self.validator,
@@ -98,13 +105,13 @@ class DCTSteganography(EmbeddingStrategy):
         result = self.embedder.embed(cover_image_bytes, payload_data, options=options)
         return result.stego_image_bytes, result.model_dump()
 
-
     def extract(
         self,
         stego_image_bytes: bytes,
         options: Optional[Dict[str, Any]] = None,
     ) -> Any:
         """
-        DCT Payload extraction (Scheduled for Phase 4B.4).
+        Extract hidden binary payload bitstream from stego image DCT mid-frequency coefficients.
         """
-        raise NotImplementedError("DCT Extraction Engine is scheduled for Phase 4B.4.")
+        return self.extractor.extract(stego_image_bytes, options=options)
+

@@ -211,6 +211,37 @@ class DecodingException(StegoAppException):
     pass
 
 
+class TransformException(StegoAppException):
+    """Raised when Forward 2D-DCT or Inverse 2D-IDCT transform fails."""
+    pass
+
+
+class InvalidBlockException(StegoAppException):
+    """Raised when 8x8 block partitioning or reassembly fails."""
+    pass
+
+
+class PaddingException(StegoAppException):
+    """Raised when image edge padding or unpadding fails."""
+    pass
+
+
+class CoefficientSelectionException(StegoAppException):
+    """Raised when DCT coefficient selection coordinate is invalid."""
+    pass
+
+
+class QuantizationException(StegoAppException):
+    """Raised when DCT quantization table operation fails."""
+    pass
+
+
+class UnsupportedImageException(UnsupportedFormatException):
+    """Raised when image format or dimensions are incompatible with DCT transform."""
+    pass
+
+
+
 class ExtractionException(DecodingException):
     """Raised when LSB or steganographic payload extraction fails."""
     pass

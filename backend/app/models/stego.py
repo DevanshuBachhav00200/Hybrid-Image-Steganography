@@ -1,6 +1,7 @@
 from enum import Enum
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from pydantic import BaseModel
+
 
 
 class StegoDomain(str, Enum):
@@ -81,6 +82,52 @@ class LSBExtractionResult(BaseModel):
 
 
 ExtractedPayload = LSBExtractionResult
+
+
+class DCTCapacityResult(BaseModel):
+    """
+    Structured model containing detailed DCT capacity analysis and payload feasibility metrics.
+    """
+    image_width: int
+    image_height: int
+    padded_width: int
+    padded_height: int
+    channels: int
+    total_pixels: int
+    color_mode: str
+    total_8x8_blocks: int
+    coefficients_per_block: int
+    total_capacity_bits: int
+    total_capacity_bytes: int
+    header_reserved_bits: int
+    usable_capacity_bits: int
+    usable_capacity_bytes: int
+    payload_size_bits: int
+    payload_size_bytes: int
+    remaining_capacity_bits: int
+    remaining_capacity_bytes: int
+    utilization_percentage: float
+    can_embed: bool
+
+
+class DCTTransformResult(BaseModel):
+    """
+    Structured model containing DCT 8x8 block transform and padding metadata.
+    """
+    image_width: int
+    image_height: int
+    padded_width: int
+    padded_height: int
+    padding_x: int
+    padding_y: int
+    channels: int
+    color_mode: str
+    format: str
+    total_blocks: int
+    blocks_shape: Tuple[int, int, int, int]
+    transform_execution_time_ms: float
+    success: bool
+
 
 
 

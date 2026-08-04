@@ -41,6 +41,8 @@ MAX_PASSWORD_LENGTH = 128
 
 # Application Default Values & Directories
 DEFAULT_ALGORITHM = "LSB"
+DEFAULT_HEADER_RESERVATION_BITS = 256  # 32 bytes reserved for steganography header & metadata
 DEFAULT_TEMP_DIR = "app/temp"
 DEFAULT_UPLOADS_DIR = "app/temp/uploads"
 DEFAULT_STATIC_DIR = "app/static"
+

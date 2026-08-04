@@ -174,6 +174,17 @@ class CapacityException(PayloadException):
     pass
 
 
+class CapacityCalculationException(StegoAppException):
+    """Raised when steganographic capacity calculation fails due to image or input invalidity."""
+    pass
+
+
+class PayloadTooLargeException(CapacityException):
+    """Raised when payload size in bits exceeds available steganographic capacity."""
+    pass
+
+
+
 class EmbeddingPreparationException(PayloadException):
     """Raised when embedding request preparation fails."""
     pass

@@ -59,7 +59,9 @@ class LSBSteganography(EmbeddingStrategy):
         payload_data: Any,
         options: Optional[Dict[str, Any]] = None
     ) -> Tuple[bytes, Dict[str, Any]]:
-        return self.embedder.embed(cover_image_bytes, payload_data, options=options)
+        result = self.embedder.embed(cover_image_bytes, payload_data, options=options)
+        return result.stego_image_bytes, result.model_dump()
+
 
     def extract(
         self,

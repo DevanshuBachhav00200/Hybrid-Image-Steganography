@@ -43,3 +43,24 @@ class LSBCapacityResult(BaseModel):
     utilization_percentage: float
     can_embed: bool
 
+
+class LSBEmbeddingResult(BaseModel):
+    """
+    Structured response model returned after successful LSB steganographic embedding.
+    """
+    stego_image_bytes: bytes
+    image_width: int
+    image_height: int
+    channels: int
+    color_mode: str
+    format: str
+    payload_size_bits: int
+    payload_size_bytes: int
+    capacity_bits: int
+    capacity_used_percentage: float
+    remaining_capacity_bits: int
+    pixels_modified: int
+    execution_time_ms: float
+    success: bool
+
+

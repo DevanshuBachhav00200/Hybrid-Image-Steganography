@@ -200,6 +200,12 @@ class EncodingException(StegoAppException):
     pass
 
 
+class EmbeddingException(EncodingException):
+    """Raised when LSB or steganographic pixel embedding fails."""
+    pass
+
+
+
 class DecodingException(StegoAppException):
     """Raised when steganographic extraction or decryption fails."""
     pass

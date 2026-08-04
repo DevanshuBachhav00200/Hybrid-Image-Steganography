@@ -14,6 +14,7 @@ from app.steganography.dwt.transform import DWTTransformer
 from app.steganography.dwt.reconstruction import DWTReconstructor
 from app.steganography.dwt.validator import DWTValidator
 from app.steganography.dwt.embed import DWTEmbedder
+from app.steganography.dwt.extract import DWTExtractor
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,7 @@ class DWTSteganography(EmbeddingStrategy):
         reconstructor: Optional[DWTReconstructor] = None,
         validator: Optional[DWTValidator] = None,
         embedder: Optional[DWTEmbedder] = None,
+        extractor: Optional[DWTExtractor] = None,
     ):
         self.capacity_calculator = capacity_calculator or DWTCapacityCalculator()
         self.transformer = transformer or DWTTransformer()
@@ -41,6 +43,12 @@ class DWTSteganography(EmbeddingStrategy):
             reconstructor=self.reconstructor,
             validator=self.validator,
         )
+        self.extractor = extractor or DWTExtractor(
+            capacity_calculator=self.capacity_calculator,
+            transformer=self.transformer,
+            validator=self.validator,
+        )
+
 
 
     def calculate_capacity(
@@ -131,6 +139,7 @@ class DWTSteganography(EmbeddingStrategy):
         options: Optional[Dict[str, Any]] = None,
     ) -> Any:
         """
-        Extract payload (Scheduled for Phase 4C.3).
+        Extract hidden binary payload bitstream from stego image DWT frequency coefficients.
         """
-        raise NotImplementedError("DWT payload extraction logic is scheduled for Phase 4C.3.")
+        return self.extractor.extract(stego_image_bytes, options=options)
+

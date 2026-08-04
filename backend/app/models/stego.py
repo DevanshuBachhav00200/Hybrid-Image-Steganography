@@ -225,6 +225,26 @@ class DWTEmbeddingResult(BaseModel):
     success: bool
 
 
+class DWTExtractionResult(BaseModel):
+    """
+    Structured response model returned after successful DWT steganographic payload extraction.
+    """
+    recovered_payload: str
+    payload_size_bits: int
+    payload_size_bytes: int
+    header_info: Dict[str, Any]
+    coefficients_read: int
+    total_coefficients: int
+    wavelet_family: str
+    decomposition_level: int
+    selected_subbands: List[str]
+    quantization_step: float
+    extraction_time_ms: float
+    success: bool
+    image_metadata: Dict[str, Any]
+
+
+
 
 
 

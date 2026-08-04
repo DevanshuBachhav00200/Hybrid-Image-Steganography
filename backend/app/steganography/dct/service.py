@@ -12,6 +12,7 @@ from app.steganography.base import EmbeddingStrategy
 from app.steganography.dct.capacity import DCTCapacityCalculator
 from app.steganography.dct.transform import DCTTransformer
 from app.steganography.dct.validator import DCTValidator
+from app.steganography.dct.embed import DCTEmbedder
 
 
 class DCTSteganography(EmbeddingStrategy):
@@ -24,10 +25,16 @@ class DCTSteganography(EmbeddingStrategy):
         capacity_calculator: Optional[DCTCapacityCalculator] = None,
         transformer: Optional[DCTTransformer] = None,
         validator: Optional[DCTValidator] = None,
+        embedder: Optional[DCTEmbedder] = None,
     ):
         self.capacity_calculator = capacity_calculator or DCTCapacityCalculator()
         self.transformer = transformer or DCTTransformer()
         self.validator = validator or DCTValidator(self.capacity_calculator)
+        self.embedder = embedder or DCTEmbedder(
+            capacity_calculator=self.capacity_calculator,
+            transformer=self.transformer,
+            validator=self.validator,
+        )
 
     def calculate_capacity(
         self,
@@ -86,9 +93,11 @@ class DCTSteganography(EmbeddingStrategy):
         options: Optional[Dict[str, Any]] = None,
     ) -> Tuple[bytes, Dict[str, Any]]:
         """
-        DCT Payload embedding (Scheduled for Phase 4B.3).
+        Embed binary payload into cover image DCT frequency coefficients.
         """
-        raise NotImplementedError("DCT Embedding Engine is scheduled for Phase 4B.3.")
+        result = self.embedder.embed(cover_image_bytes, payload_data, options=options)
+        return result.stego_image_bytes, result.model_dump()
+
 
     def extract(
         self,

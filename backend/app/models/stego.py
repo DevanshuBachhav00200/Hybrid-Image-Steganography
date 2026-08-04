@@ -129,5 +129,29 @@ class DCTTransformResult(BaseModel):
     success: bool
 
 
+class DCTEmbeddingResult(BaseModel):
+    """
+    Structured response model returned after successful DCT steganographic payload embedding.
+    """
+    stego_image_bytes: bytes
+    payload_size_bits: int
+    payload_size_bytes: int
+    usable_capacity_bits: int
+    capacity_used_percentage: float
+    remaining_capacity_bits: int
+    coefficients_modified: int
+    total_blocks_processed: int
+    coefficients_per_block: int
+    quantization_step: float
+    psnr_db: float
+    mse: float
+    embedding_time_ms: float
+    format: str
+    color_mode: str
+    dimensions: Tuple[int, int]
+    success: bool
+
+
+
 
 

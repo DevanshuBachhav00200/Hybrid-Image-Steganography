@@ -9,6 +9,7 @@ from app.steganography.dct.validator import DCTValidator
 from app.steganography.dct.coefficient_selector import MidFrequencySelector
 from app.steganography.dct.quantization import QuantizationTable
 from app.steganography.dct.utils import DCTUtils
+from app.steganography.dct.embed import DCTEmbedder
 
 __all__ = [
     "DCTSteganography",
@@ -18,4 +19,6 @@ __all__ = [
     "MidFrequencySelector",
     "QuantizationTable",
     "DCTUtils",
+    "DCTEmbedder",
 ]
+

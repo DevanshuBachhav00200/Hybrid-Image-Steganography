@@ -68,4 +68,6 @@ class LSBSteganography(EmbeddingStrategy):
         stego_image_bytes: bytes,
         options: Optional[Dict[str, Any]] = None
     ) -> Any:
-        return self.extractor.extract(stego_image_bytes, options=options)
+        result = self.extractor.extract(stego_image_bytes, options=options)
+        return result.recovered_payload
+

@@ -1,5 +1,7 @@
 from enum import Enum
+from typing import Dict, Any
 from pydantic import BaseModel
+
 
 class StegoDomain(str, Enum):
     LSB = "LSB"
@@ -62,5 +64,23 @@ class LSBEmbeddingResult(BaseModel):
     pixels_modified: int
     execution_time_ms: float
     success: bool
+
+
+class LSBExtractionResult(BaseModel):
+
+    """
+    Structured response model returned after successful LSB steganographic payload extraction.
+    """
+    recovered_payload: str
+    payload_size_bits: int
+    payload_size_bytes: int
+    header_info: Dict[str, Any]
+    extraction_time_ms: float
+    success: bool
+    image_metadata: Dict[str, Any]
+
+
+ExtractedPayload = LSBExtractionResult
+
 
 

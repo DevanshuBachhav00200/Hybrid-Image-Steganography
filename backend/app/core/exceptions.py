@@ -211,6 +211,27 @@ class DecodingException(StegoAppException):
     pass
 
 
+class ExtractionException(DecodingException):
+    """Raised when LSB or steganographic payload extraction fails."""
+    pass
+
+
+class NoHiddenDataException(ExtractionException):
+    """Raised when no valid steganography header or magic signature is found in image."""
+    pass
+
+
+class CorruptedHeaderException(ExtractionException):
+    """Raised when steganography header magic bytes, format version, or checksum is corrupt."""
+    pass
+
+
+class IncompletePayloadException(ExtractionException):
+    """Raised when image pixel stream terminates before complete payload is recovered."""
+    pass
+
+
+
 class MetricsException(StegoAppException):
     """Raised when quality metric evaluation fails."""
     pass

@@ -75,12 +75,15 @@ class DWTEmbedder:
             raise EmbeddingException(f"Invalid quantization step ({quantization_step}). Must be positive.")
 
         # 1. Parse payload bitstream
-        if hasattr(payload_data, "binary_bitstream"):
+        if hasattr(payload_data, "binary_data"):
+            bitstream = payload_data.binary_data
+        elif hasattr(payload_data, "binary_bitstream"):
             bitstream = payload_data.binary_bitstream
         elif isinstance(payload_data, str):
             bitstream = payload_data
         else:
             raise EmbeddingException("Invalid payload format. Expected binary bitstream string or Payload model.")
+
 
         if not bitstream or not all(c in "01" for c in bitstream):
             raise EmbeddingException("Payload bitstream contains invalid characters. Must contain only '0' and '1'.")
